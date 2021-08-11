@@ -3,13 +3,16 @@ lockfileVersion: 5.3
 specifiers:
   '@vitejs/plugin-react-refresh': ^1.3.1
   autoprefixer: ^10.3.1
+  clsx: ^1.1.1
   postcss: ^8.3.6
   react: ^17.0.0
   react-dom: ^17.0.0
   tailwindcss: ^2.2.7
+  tailwindcss-multi-theme: ^1.0.4
   vite: ^2.4.4
 
 dependencies:
+  clsx: 1.1.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
 
@@ -18,6 +21,7 @@ devDependencies:
   autoprefixer: 10.3.1_postcss@8.3.6
   postcss: 8.3.6
   tailwindcss: 2.2.7_7b69a43ec4689fa7484dee35f79a7806
+  tailwindcss-multi-theme: 1.0.4_tailwindcss@2.2.7
   vite: 2.4.4
 
 packages:
@@ -452,6 +456,11 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
+    dev: false
 
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
@@ -1149,6 +1158,14 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       has-flag: 4.0.0
+    dev: true
+
+  /tailwindcss-multi-theme/1.0.4_tailwindcss@2.2.7:
+    resolution: {integrity: sha512-iwq4c039Urx6q2j9YDvGF5GmOs6vx5AMIQdscSIH9cPHmDhQE38eE7/4SeoZxB+6TY+xvZeLa/6UV9iRovoEuA==}
+    peerDependencies:
+      tailwindcss: ^1.4.6
+    dependencies:
+      tailwindcss: 2.2.7_7b69a43ec4689fa7484dee35f79a7806
     dev: true
 
   /tailwindcss/2.2.7_7b69a43ec4689fa7484dee35f79a7806:
