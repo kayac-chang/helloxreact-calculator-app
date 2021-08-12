@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React from "react";
+import React, { useCallback } from "react";
 
 function Screen() {
   return (
@@ -15,7 +15,7 @@ function Screen() {
   );
 }
 
-function Button({ children, className }) {
+function Button({ children, className, ...props }) {
   return (
     <button
       className={clsx(
@@ -23,22 +23,26 @@ function Button({ children, className }) {
         "shadow-normal active:shadow-pressed active:brightness-110",
         className
       )}
+      {...props}
     >
       {children}
     </button>
   );
 }
 
-function Number({ className, ...props }) {
+function Number({ className, children, ...props }) {
   return (
     <Button
+      type="button"
       className={clsx(
         "text-3xl",
         "blue:text-blue-600 blue:bg-orange-500 blue:ring-orange-600",
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </Button>
   );
 }
 
@@ -49,6 +53,7 @@ function Operator({ ...props }) {
 function Reset({ className, ...props }) {
   return (
     <Button
+      type="reset"
       className={clsx(
         "blue:text-white blue:bg-blue-300 blue:ring-blue-400",
         className
@@ -61,6 +66,7 @@ function Reset({ className, ...props }) {
 function Confirm({ className, ...props }) {
   return (
     <Button
+      type="button"
       className={clsx(
         "blue:text-white blue:bg-red-500 blue:ring-red-600",
         className
@@ -106,8 +112,18 @@ function Keypad() {
 }
 
 export function Calculator() {
+  const onSubmit = useCallback(
+    /**
+     * @param {Event} event
+     */
+    (event) => {
+      console.log(event.target);
+    },
+    []
+  );
+
   return (
-    <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+    <form className="flex flex-col gap-6" onClickCapture={onSubmit}>
       <Screen />
 
       <Keypad />
