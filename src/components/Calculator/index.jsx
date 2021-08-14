@@ -7,7 +7,7 @@ function Screen({ children }) {
     <div
       className={clsx(
         "flex justify-end items-center rounded-lg p-6 pb-4",
-        "text-3xl font-bold",
+        "text-3xl sm:text-5xl font-bold",
         "blue:bg-blue-800",
         "cyan:bg-gray-400",
         "violet:bg-violet-800"
@@ -23,7 +23,7 @@ function Button({ type = "button", children, className, ...props }) {
     <button
       type={type}
       className={clsx(
-        "rounded font-bold",
+        "rounded sm:rounded-lg font-bold",
         "shadow-normal active:shadow-pressed active:brightness-110",
         className
       )}
@@ -42,13 +42,12 @@ function Toggle({ children, className, name, checked, ...props }) {
         id={children}
         name={name}
         className="hidden peer"
-        checked={checked}
-        readOnly
+        defaultChecked={checked}
       />
 
       <label
         className={clsx(
-          "h-full rounded font-bold",
+          "h-full rounded sm:rounded-lg font-bold",
           "shadow-normal peer-checked:brightness-110",
           className
         )}
@@ -148,7 +147,7 @@ const Keypad = memo(
       <div
         className={clsx(
           "p-6 rounded-lg min-h-[26rem]",
-          "grid grid-cols-4 gap-3",
+          "grid grid-cols-4 gap-3 sm:gap-4",
           "blue:bg-blue-700",
           "cyan:bg-red-700",
           "violet:bg-violet-800"
