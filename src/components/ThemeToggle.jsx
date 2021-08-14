@@ -21,8 +21,10 @@ function Toggle({ style }) {
     <div
       className={clsx(
         "absolute rounded-full w-4 h-4 pointer-events-none",
+        "transition duration-150",
         "blue:bg-red-500",
-        "transition duration-150"
+        "cyan:bg-orange-700",
+        "violet:bg-cyan-500"
       )}
       style={style}
     />
@@ -67,7 +69,9 @@ export function ThemeToggle() {
         <div
           className={clsx(
             "flex items-center rounded-full p-1.5 gap-1 relative",
-            "blue:bg-blue-700"
+            "blue:bg-blue-700",
+            "cyan:bg-red-700",
+            "violet:bg-violet-800"
           )}
         >
           {themes.map(({ value }) => (

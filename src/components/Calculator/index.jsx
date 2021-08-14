@@ -7,8 +7,10 @@ function Screen({ children }) {
     <div
       className={clsx(
         "flex justify-end items-center rounded-lg p-6 pb-4",
-        "text-white text-3xl font-bold",
-        "blue:bg-blue-800"
+        "text-3xl font-bold",
+        "blue:bg-blue-800",
+        "cyan:bg-gray-400",
+        "violet:bg-violet-800"
       )}
     >
       <output>{children}</output>
@@ -69,6 +71,8 @@ const Keypad = memo(
           className={clsx(
             "text-3xl",
             "blue:text-blue-600 blue:bg-orange-500 blue:ring-orange-600",
+            "cyan:bg-yellow-500 cyan:ring-yellow-600",
+            "violet:bg-violet-700 violet:ring-violet-600",
             className
           )}
           onClick={push(props.children)}
@@ -87,7 +91,9 @@ const Keypad = memo(
           name="operator"
           className={clsx(
             "text-3xl flex justify-center items-center",
-            "blue:text-blue-600 blue:bg-orange-500 blue:ring-orange-600"
+            "blue:text-blue-600 blue:bg-orange-500 blue:ring-orange-600",
+            "cyan:bg-yellow-500 cyan:ring-yellow-600",
+            "violet:bg-violet-700 violet:ring-violet-600"
           )}
           onClick={operate(props.children)}
           checked={operator === props.children}
@@ -100,7 +106,9 @@ const Keypad = memo(
       return (
         <Button
           className={clsx(
-            "blue:text-white blue:bg-blue-300 blue:ring-blue-400",
+            "blue:bg-blue-300 blue:ring-blue-400",
+            "cyan:text-white cyan:bg-cyan-600 cyan:ring-cyan-700",
+            "violet:bg-magenta-600 violet:ring-magenta-500",
             className
           )}
           onClick={remove()}
@@ -125,7 +133,9 @@ const Keypad = memo(
         <Button
           className={clsx(
             "col-span-2",
-            "blue:text-white blue:bg-red-500 blue:ring-red-600",
+            "blue:bg-red-500 blue:ring-red-600",
+            "cyan:bg-orange-700 cyan:ring-orange-800",
+            "violet:bg-cyan-500 violet:ring-cyan-400 violet:text-blue-900",
             className
           )}
           onClick={enter()}
@@ -139,7 +149,9 @@ const Keypad = memo(
         className={clsx(
           "p-6 rounded-lg min-h-[26rem]",
           "grid grid-cols-4 gap-3",
-          "blue:bg-blue-700"
+          "blue:bg-blue-700",
+          "cyan:bg-red-700",
+          "violet:bg-violet-800"
         )}
       >
         <Number>7</Number>
