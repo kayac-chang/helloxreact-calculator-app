@@ -62,8 +62,6 @@ function Toggle({ children, className, name, checked, ...props }) {
 
 const Keypad = memo(
   ({ operator, actions: { reset, push, remove, operate, enter } }) => {
-    console.log("render", operator);
-
     function Number({ className, ...props }) {
       return (
         <Button
