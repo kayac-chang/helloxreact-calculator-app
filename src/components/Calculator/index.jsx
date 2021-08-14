@@ -32,7 +32,7 @@ function Button({ type = "button", children, className, ...props }) {
   );
 }
 
-function Toggle({ children, className, name, checked, onChange, ...props }) {
+function Toggle({ children, className, name, checked, ...props }) {
   return (
     <div>
       <input
@@ -41,7 +41,7 @@ function Toggle({ children, className, name, checked, onChange, ...props }) {
         name={name}
         className="hidden peer"
         checked={checked}
-        onChange={onChange}
+        readOnly
       />
 
       <label
@@ -89,7 +89,7 @@ const Keypad = memo(
             "text-3xl flex justify-center items-center",
             "blue:text-blue-600 blue:bg-orange-500 blue:ring-orange-600"
           )}
-          onChange={operate(props.children)}
+          onClick={operate(props.children)}
           checked={operator === props.children}
           {...props}
         />

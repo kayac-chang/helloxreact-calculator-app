@@ -6,14 +6,49 @@ function format(number) {
   }).format(number);
 }
 
-const operators = ["+", "-", "x", "/"];
+// calculation rule
+function PEMDAS(calculation) {
+  const index = calculation.findIndex((operator) =>
+    ["x", "/"].includes(operator)
+  );
 
-const operations = {
-  "/": (a, b) => a / b,
-  x: (a, b) => a * b,
-  "+": (a, b) => a + b,
-  "-": (a, b) => a - b,
-};
+  return index !== -1
+    ? index
+    : calculation.findIndex((operator) => ["+", "-"].includes(operator));
+}
+
+function findLastOperator(calculation) {
+  return calculation.reduce((acc, cur) => (isOperator(cur) ? cur : acc), "");
+}
+
+function isOperator(token) {
+  return ["+", "-", "x", "/"].includes(token);
+}
+
+function findLast(calculation) {
+  return calculation[calculation.length - 1];
+}
+
+function calculate([left, operator, right]) {
+  return {
+    "/": (a, b) => a / b,
+    x: (a, b) => a * b,
+    "+": (a, b) => a + b,
+    "-": (a, b) => a - b,
+  }[operator](Number(left), Number(right));
+}
+
+function operate(calculation) {
+  const index = PEMDAS(calculation);
+
+  if (index === -1) return calculation;
+
+  return operate([
+    ...calculation.slice(0, index - 1),
+    calculate(calculation.slice(index - 1, index + 2)),
+    ...calculation.slice(index + 2),
+  ]);
+}
 
 const initialState = ["0"];
 
@@ -23,9 +58,9 @@ function reducer(state, action) {
   }
 
   if (action.type === "PUSH") {
-    const last = state[state.length - 1];
+    const last = findLast(state);
 
-    if (operators.includes(last)) {
+    if (isOperator(last)) {
       return [...state, action.value];
     }
 
@@ -33,17 +68,17 @@ function reducer(state, action) {
       return state;
     }
 
-    if (action.value !== "." && last === "0") {
-      return [...state.slice(0, -1), action.value];
+    if (action.value === ".") {
+      return [...state.slice(0, -1), last + action.value];
     }
 
-    return [...state.slice(0, -1), last + action.value];
+    return [...state.slice(0, -1), format(last + action.value)];
   }
 
   if (action.type === "REMOVE") {
-    const last = state[state.length - 1];
+    const last = findLast(state);
 
-    if (operators.includes(last)) {
+    if (isOperator(last)) {
       return state.slice(0, -1);
     }
 
@@ -51,17 +86,21 @@ function reducer(state, action) {
   }
 
   if (action.type === "OPERATE") {
-    const last = state[state.length - 1];
+    const last = findLast(state);
 
-    if (operators.includes(last)) {
+    if (isOperator(last)) {
       return [...state.slice(0, -1), action.value];
+    }
+
+    if (findLastOperator(state) === action.value) {
+      return [...operate(state).map(format), action.value];
     }
 
     return [...state, action.value];
   }
 
   if (action.type === "ENTER") {
-    //   TODO
+    return operate(state).map(format);
   }
 
   return state;
@@ -81,16 +120,11 @@ export function useCalculator() {
     [dispatch]
   );
 
-  console.log(state);
-
   //  compute
-  const operator = state.reduce(
-    (acc, cur) => (operators.includes(cur) ? cur : acc),
-    ""
-  );
+  const operator = findLastOperator(state);
 
-  const last = state[state.length - 1];
-  const output = operators.includes(last) ? state[state.length - 2] : last;
+  const last = findLast(state);
+  const output = isOperator(last) ? state[state.length - 2] : last;
 
   return { operator, output, actions };
 }
