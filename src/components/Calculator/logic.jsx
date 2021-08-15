@@ -36,11 +36,13 @@ function merge([left, operator, right]) {
 }
 
 export function calculate(calculation) {
+  if (calculation.length < 3) return calculation;
+
   const index = PEMDAS(calculation);
 
   if (index === -1) return calculation;
 
-  return operate([
+  return calculate([
     ...calculation.slice(0, index - 1),
     merge(calculation.slice(index - 1, index + 2)),
     ...calculation.slice(index + 2),

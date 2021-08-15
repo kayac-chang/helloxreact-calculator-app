@@ -29,7 +29,7 @@ function reducer(state, action) {
       return [...state.slice(0, -1), last + action.value];
     }
 
-    return [...state.slice(0, -1), format(last + action.value)];
+    return [...state.slice(0, -1), last + action.value];
   }
 
   if (action.type === "REMOVE") {
@@ -39,7 +39,7 @@ function reducer(state, action) {
       return state.slice(0, -1);
     }
 
-    return [...state.slice(0, -1), format(last.slice(0, -1))];
+    return [...state.slice(0, -1), String(last).slice(0, -1)];
   }
 
   if (action.type === "OPERATE") {
@@ -50,14 +50,14 @@ function reducer(state, action) {
     }
 
     if (findLastOperator(state) === action.value) {
-      return [...calculate(state).map(format), action.value];
+      return [...calculate(state), action.value];
     }
 
     return [...state, action.value];
   }
 
   if (action.type === "ENTER") {
-    return calculate(state).map(format);
+    return calculate(state);
   }
 
   return state;
@@ -80,7 +80,7 @@ export function useCalculator() {
   //  compute
   const operator = findLastOperator(state);
   const last = findLast(state);
-  const output = isOperator(last) ? state[state.length - 2] : last;
+  const output = format(isOperator(last) ? state[state.length - 2] : last);
 
   return { operator, output, actions };
 }
