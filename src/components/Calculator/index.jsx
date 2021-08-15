@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { memo } from "react";
-import { useCalculator } from "./logic";
+import { useCalculator } from "./hooks";
 
 function Screen({ children }) {
   return (
