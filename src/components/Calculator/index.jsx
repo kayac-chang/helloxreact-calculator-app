@@ -169,7 +169,7 @@ const Keypad = memo(
         <Fraction>.</Fraction>
         <Number>0</Number>
         <Operator>/</Operator>
-        <Operator>x</Operator>
+        <Operator>*</Operator>
 
         <Reset>RESET</Reset>
         <Enter>=</Enter>

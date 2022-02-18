@@ -1,67 +1,122 @@
+import { calculate, isOperand, isOperator } from "./logic";
 import {
+  last,
+  append,
+  pipe,
+  equals,
+  unless,
+  concat,
+  all,
+  lensIndex,
+  set,
+  cond,
+  of,
+  identity,
+  T,
   findLast,
-  isOperator,
-  findLastOperator,
-  calculate,
-  format,
-} from "./logic";
+  any,
+  when,
+  complement,
+  always,
+  converge,
+  map,
+  __,
+  pair,
+  init,
+  view,
+} from "ramda";
 import { useReducer, useMemo } from "react";
 
 const initialState = ["0"];
 
-function reducer(state, action) {
-  if (action.type === "RESET") {
-    return initialState;
-  }
+const isFalsy = complement(Boolean);
+const isDot = equals(".");
 
-  if (action.type === "PUSH") {
-    const last = findLast(state);
+const withLast = (fn) => pipe(last, fn);
+const checkLast = withLast;
 
-    if (isOperator(last)) {
-      return [...state, action.value];
-    }
+const removeLastChar = withLast(init);
 
-    if (action.value === "." && last.includes(action.value)) {
-      return state;
-    }
+const tailLen = lensIndex(-1);
+const lastChar = view(tailLen);
+const setLast = set(tailLen);
 
-    if (action.value === ".") {
-      return [...state.slice(0, -1), last + action.value];
-    }
+const safeToNumber = unless(isNaN, Number);
+const findLastOperand = findLast(pipe(safeToNumber, isOperand));
 
-    return [...state.slice(0, -1), last + action.value];
-  }
+const safeCalculate = pipe(map(safeToNumber), calculate, String);
 
-  if (action.type === "REMOVE") {
-    const last = findLast(state);
+const createReducer = (handlers) => (state, action) =>
+  handlers.hasOwnProperty(action.type)
+    ? handlers[action.type](state, action)
+    : state;
 
-    if (isOperator(last)) {
-      return state.slice(0, -1);
-    }
+const reducer = createReducer({
+  RESET: always(initialState),
 
-    return [...state.slice(0, -1), String(last).slice(0, -1)];
-  }
+  PUSH: (state, action) =>
+    cond([
+      [
+        checkLast(isOperator),
+        append(action.value),
+        //
+      ],
+      [
+        pipe(lastChar, pair(action.value), all(isDot)),
+        identity,
+        //
+      ],
+      [
+        T,
+        setLast(concat(last(state), action.value)),
+        //
+      ],
+    ])(state),
 
-  if (action.type === "OPERATE") {
-    const last = findLast(state);
+  REMOVE: cond([
+    [
+      checkLast(isOperator),
+      init,
+      //
+    ],
+    [
+      checkLast(isFalsy),
+      always(initialState),
+      //
+    ],
+    [
+      T,
+      pipe(
+        converge(setLast, [removeLastChar, identity]),
+        when(checkLast(isFalsy), always(initialState))
+      ),
+    ],
+  ]),
 
-    if (isOperator(last)) {
-      return [...state.slice(0, -1), action.value];
-    }
+  OPERATE: (state, action) =>
+    cond([
+      [
+        checkLast(isOperator),
+        setLast(action.value),
+        //
+      ],
+      [
+        any(isOperator),
+        pipe(
+          safeCalculate,
+          pair(__, action.value)
+          //
+        ),
+      ],
+      [
+        T,
+        append(action.value),
+        //
+      ],
+    ])(state),
 
-    if (findLastOperator(state) === action.value) {
-      return [...calculate(state), action.value];
-    }
-
-    return [...state, action.value];
-  }
-
-  if (action.type === "ENTER") {
-    return calculate(state);
-  }
-
-  return state;
-}
+  ENTER: pipe(safeCalculate, of),
+});
 
 export function useCalculator() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -78,9 +133,8 @@ export function useCalculator() {
   );
 
   //  compute
-  const operator = findLastOperator(state);
-  const last = findLast(state);
-  const output = format(isOperator(last) ? state[state.length - 2] : last);
+  const operator = findLast(isOperator)(state);
+  const output = pipe(findLastOperand, safeToNumber)(state);
 
   return { operator, output, actions };
 }
